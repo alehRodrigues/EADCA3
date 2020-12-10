@@ -91,24 +91,36 @@ using EADCA3.Shared;
         }
         #pragma warning restore 1998
 #nullable restore
-#line 37 "C:\Users\hhoxh\source\repos\EADCA3\EADCA3\Pages\FetchData.razor"
+#line 41 "C:\Users\hhoxh\source\repos\EADCA3\EADCA3\Pages\FetchData.razor"
        
-    private WeatherForecast[] forecasts;
+    private Root[] news;
+
+    public async Task Find()
+    {
+        news = await Http.GetFromJsonAsync<Root[]>("https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=a15cbcc05e814709a1749fbec881c2c2");
+    }
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
+        await Find();
     }
 
-    public class WeatherForecast
+    public class Source
     {
-        public DateTime Date { get; set; }
+        public string id { get; set; }
+        public string name { get; set; }
+    }
 
-        public int TemperatureC { get; set; }
-
-        public string Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    public class Root
+    {
+        public Source source { get; set; }
+        public string author { get; set; }
+        public string title { get; set; }
+        public string description { get; set; }
+        public string url { get; set; }
+        public string urlToImage { get; set; }
+        public DateTime publishedAt { get; set; }
+        public string content { get; set; }
     }
 
 #line default
